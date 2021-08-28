@@ -1,19 +1,20 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database'
+import Logger from '@ioc:Adonis/Core/Logger'
 import User from 'App/Models/user'
-
 export default class AuthController {
   public async index ({ request, auth, response }: HttpContextContract) {
-    // login a user
-
     const { email, password } = request.only(['email', 'password'])
     try {
+      Logger.info('Login process started')
       const token = await auth.use('api').attempt(email, password)
       return response.ok({
         msg: 'Login Successful',
-        ...token })
-    } catch(e) {
+        ...token,
+      })
+    } catch (e) {
       return response.badRequest({
-        msg : 'Invalid user credentials',
+        msg: 'Invalid user credentials',
       })
     }
   }
@@ -24,7 +25,10 @@ export default class AuthController {
       'password',
     ])
     try {
-      const exists = await User.first('email', details.email)
+      Logger.info('Register process started')
+      const exists = await User.query()
+        .where('email', details.email)
+        .first()
       if (exists) {
         response.forbidden({ error: 'User email is not unique ' })
       } else {
@@ -55,16 +59,16 @@ export default class AuthController {
   public async update ({ }: HttpContextContract) {
   }
 
-  public async destroy ({ auth , response }: HttpContextContract) {
+  public async destroy ({ auth, response }: HttpContextContract) {
     //logout
-    try{
+    try {
       await auth.use('api').revoke()
-      return{
-        revoked :  true,
+      return {
+        revoked: true,
       }
-    } catch(e) {
+    } catch (e) {
       return response.badRequest({
-        msg :  e.message,
+        msg: e.message,
       })
     }
   }

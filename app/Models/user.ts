@@ -1,12 +1,15 @@
+import Check from 'App/Models/Check'
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import {
   column,
   beforeSave,
   BaseModel,
+  HasMany,
+  hasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 
-export default class user extends BaseModel {
+export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -25,8 +28,11 @@ export default class user extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  @hasMany(() => Check)
+  public Checks: HasMany<typeof Check>
+
   @beforeSave()
-  public static async hashPassword (user: user) {
+  public static async hashPassword (user: User) {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
