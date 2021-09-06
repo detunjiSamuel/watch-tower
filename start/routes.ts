@@ -19,9 +19,9 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+
+
+
 Route.group(
   () => {
     Route.post('', 'AuthController.create')
@@ -35,4 +35,6 @@ Route.group(
     Route.post('', 'ChecksController.create')
   }
 ).prefix('/check').middleware('auth:api')
+
+Route.any('/p/:ping' , 'PingsController.process')
 //TODO check out silent auth

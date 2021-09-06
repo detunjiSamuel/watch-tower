@@ -1,47 +1,39 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Database from '@ioc:Adonis/Lucid/Database'
 import Logger from '@ioc:Adonis/Core/Logger'
-import User from 'App/Models/user'
+import Service from 'App/Services/AuthService'
 export default class AuthController {
+  private service = new Service()
   public async index ({ request, auth, response }: HttpContextContract) {
-    const { email, password } = request.only(['email', 'password'])
-    try {
-      Logger.info('Login process started')
-      const token = await auth.use('api').attempt(email, password)
+    Logger.info('Login process started')
+    const data = request.only(['email', 'password'])
+    try{
+      const token = await this.service.login({auth, data})
       return response.ok({
         msg: 'Login Successful',
         ...token,
       })
-    } catch (e) {
+    } catch(e) {
       return response.badRequest({
-        msg: 'Invalid user credentials',
+        msg:  e.message,
+
       })
     }
   }
 
-  public async create ({ request, auth, response }: HttpContextContract) {
-    const details = request.only([
+  public async create ({ request,response , auth }: HttpContextContract) {
+    //TODO add form validation
+    Logger.info('Register process started')
+    const data = request.only([
       'email',
       'password',
     ])
     try {
-      Logger.info('Register process started')
-      const exists = await User.query()
-        .where('email', details.email)
-        .first()
-      if (exists) {
-        response.forbidden({ error: 'User email is not unique ' })
-      } else {
-        await User.create({ ...details })
-        console.log('first check')
-        const token = await auth.use('api').attempt(details.email, details.password)
-        console.log(token)
-        return response.ok({
-          msg:
+      const user = await this.service.register({data , auth})
+      return response.ok({
+        msg:
             'Registration successful.',
-          ...token,
-        })
-      }
+        ...user,
+      })
     } catch (e) {
       return response.badRequest(e.message)
     }
@@ -60,9 +52,8 @@ export default class AuthController {
   }
 
   public async destroy ({ auth, response }: HttpContextContract) {
-    //logout
     try {
-      await auth.use('api').revoke()
+      await this.service.logout(auth)
       return {
         revoked: true,
       }
