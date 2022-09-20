@@ -5,7 +5,6 @@ async () => {
 	try {
 		await mongoose.connect(process.env.MONGODB_URI, async () => {
 			console.log("db started");
-			// to add run seed here
 		});
 	} catch (e) {
 		console.error("dbconnect", "failed")
@@ -13,24 +12,28 @@ async () => {
 
 };
 
+let cache = global.mongoose
 
-const AppSchema = new mongoose.Schema({
-	name: {
-		type: String,
-		required: true
-	},
-	description: {
-		type: String,
-		required: false
-	},
-	createdAt: {
-		type: Date,
-		default: Date.now,
-	},
-	userId: {
-		type: mongoose.Schema.Types.ObjectId,
-		required: true,
-	},
-})
+if (!cache)
+	cache = global.mongoose = { conn: null, promise: null }
 
-export const AppModel = mongoose.model("app", AppSchema) 
+const connect = async () => {
+	if (cache.conn)
+		return cache.conn
+	if (!cache.conn) {
+		const options = {
+			bufferCommands: false
+		}
+		cache.promise = mongoose.connect(process.env.MONGODB_URI, options).then((mongoose) => {
+			console.log("db started");
+			return mongoose
+		}).catch(e => {
+			console.error("dbconnect", "failed")
+		})
+	}
+
+	cache.conn = await cache.promise
+	return cache.conn
+}
+
+export default connect
