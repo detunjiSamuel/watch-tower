@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
 
-const AppSchema = new mongoose.Schema({
+const ProjectSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -18,15 +18,10 @@ const AppSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
-    projectId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "project",
-        required: true,
-      },
 })
 
-const AppModel = mongoose.model("app", AppSchema)
+const ProjectModel = mongoose.model("project", ProjectSchema)
 
 
 
-export default AppModel 
+export default ProjectModel 
