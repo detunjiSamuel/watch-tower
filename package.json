@@ -15,6 +15,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.2.1",
     "@next-auth/mongodb-adapter": "^1.0.4",
     "cypress": "^10.0.3",
     "mongodb": "^4.10.0",
