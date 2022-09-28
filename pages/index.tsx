@@ -2,7 +2,6 @@ import Head from "next/head";
 import Footer from "../components/Footer";
 
 import { useUser } from "@clerk/nextjs";
-
 export default function Home() {
   const user = useUser();
   console.log(user);
