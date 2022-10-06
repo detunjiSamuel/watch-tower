@@ -1,7 +1,10 @@
 import Head from "next/head";
 import Footer from "../components/Footer";
 
+import { useSession, signIn, signOut } from "next-auth/react";
+
 export default function Home() {
+  const { data: session } = useSession();
   return (
     <div className="container">
       <Head>
@@ -11,7 +14,18 @@ export default function Home() {
 
       <main>
         <p className="description">
-          Get started by editing <code>pages/index.js</code>
+          {!session ? (
+            <>
+              <p>Not signed in</p>
+              <br />
+              <button onClick={() => signIn()}>Sign in</button>
+            </>
+          ) : (
+            <div>
+              <h4>Signed in as {session.user.name}</h4>
+              <button onClick={() => signOut()}>Sign out</button>
+            </div>
+          )}
         </p>
       </main>
 
