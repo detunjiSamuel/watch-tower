@@ -1,17 +1,17 @@
 import type { Types } from "mongoose"
-import Project from './Project'
+// import Project from './Project'
 
-export interface User {
-    _id: Types.ObjectId
-    _v: string
-    id: string
-    name: string | null
-    email: string | null
-    emailVerified: Date | null
-    image: string | null
-    projects : Project[]
+// export interface User {
+//     _id: Types.ObjectId
+//     _v: string
+//     id: string
+//     name: string | null
+//     email: string | null
+//     emailVerified: Date | null
+//     image: string | null
+//     projects : Project[]
 
-}
+// }
 
 
 export interface Account {

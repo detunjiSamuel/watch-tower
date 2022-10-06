@@ -3,25 +3,6 @@
 
 
 
-# Eslint
-npm run lint || (
-    echo "❌ Eslint check failed. Run `npm run lint:fix`, add and commit the changes.";
-    false;
-)
-
-# Prettier
-npm run format || (
-    echo "❌ Prettier check failed. Run `npm run format:fix`, add and commit the changes.";
-    false;
-)
-
-
-# Typescipt
-
-npm run types:check || (
-    echo "❌ Types check failed. Run `npm run format:fix`, add and commit the changes.";
-    false;
-)
 
 
 echo " All check passed

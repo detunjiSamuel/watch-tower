@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
-import { User, Account, Session, VerificationToken } from "../types/NextAuth";
-
+import {  Account, Session, VerificationToken } from "../types/NextAuth";
+import User from '../types/User'
 export const userSchema = new Schema<User>({
     name: { type: String },
     email: { type: String, unique: true },
