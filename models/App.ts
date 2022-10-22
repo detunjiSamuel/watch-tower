@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
+import type IApplication from "../types/Application"
 
-
-const AppSchema = new mongoose.Schema({
+const AppSchema = new mongoose.Schema<IApplication>({
     name: {
         type: String,
         required: true
@@ -10,7 +10,7 @@ const AppSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    createdAt: {
+    updatedAt: {
         type: Date,
         default: Date.now,
     },
@@ -25,7 +25,7 @@ const AppSchema = new mongoose.Schema({
       },
 })
 
-const AppModel = mongoose.model("app", AppSchema)
+const AppModel = mongoose.models.app || mongoose.model("app", AppSchema)
 
 
 

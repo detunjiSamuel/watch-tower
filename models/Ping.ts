@@ -1,4 +1,23 @@
+import mongoose from "mongoose";
 
-const ping = 0
+import type IPing from "../types/Ping";
 
-export default ping
+
+const PingSchemma = new mongoose.Schema<IPing>({
+    name: {
+        type: String,
+        required: false
+    },
+    description: {
+        type: String,
+        required: false
+    },
+    ApplicationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    }
+}, { strict: false })
+
+
+
+export default mongoose.model("ping", PingSchemma)

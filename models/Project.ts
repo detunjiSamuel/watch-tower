@@ -1,7 +1,7 @@
-import mongoose from "mongoose"
+import mongoose, { Mongoose } from "mongoose"
+import type IProject from "../types/Project"
 
-
-const ProjectSchema = new mongoose.Schema({
+const ProjectSchema = new mongoose.Schema<IProject>({
     name: {
         type: String,
         required: true
@@ -19,9 +19,7 @@ const ProjectSchema = new mongoose.Schema({
         required: true,
     },
 })
-
-const ProjectModel = mongoose.model("project", ProjectSchema)
-
+const ProjectModel =  mongoose.models.project || mongoose.model("project", ProjectSchema)
 
 
 export default ProjectModel 
